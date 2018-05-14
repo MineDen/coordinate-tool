@@ -1,0 +1,48 @@
+div.select {
+    position: relative;
+    display: inline-block;
+}
+
+div.select > div.select-sel {
+    height: 34px;
+    border-radius: 4px;
+    margin: 8px 0;
+    padding: 4px;
+    color: #323232;
+    box-sizing: border-box; 
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    background: linear-gradient(180deg, white, #f0f0f0);
+    user-select: none;
+    outline-color: rgb(235, 114, 34);
+    display: inline-block;
+}
+
+div.select > div.select-list {
+    position: absolute;
+    bottom: calc(100%);
+    width: 164px;
+    padding: 0 4px 4px 4px;
+    background: linear-gradient(180deg, white, #f6f6f6);
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    visibility: hidden;
+}
+
+div.select > div.select-list > * {
+    margin-top: 4px;
+}
+
+div.select > div.select-list > :not(:first-child) {
+    margin-left: 4px;
+}
+div.select > div.select-list > .sel-nomargin {
+    margin-left: 0;
+}
+
+div.select.sel-open > div.select-sel {
+    background: linear-gradient(180deg, #ededed, #f0f0f0);
+}
+
+div.select.sel-open > div.select-list {
+    visibility: initial;
+}

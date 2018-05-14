@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Coordinate Tool</title>
+        <script type="module" src="main.js"></script>
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="lib/select.css">
+    </head>
+    <body class="loading">
+        <div id="loader">
+
+        </div>
+        <div id="main-wrapper">
+            <div id="leftpanel">
+                <div class="sbtn" id="tabs">
+                    <button id="points">Points</button><button id="appearance">Appearance</button>
+                </div>
+                <div id="points-panel">
+                    <div id="point-list"></div>
+                    <div id="point-add">
+                        <div class="select" id="letters"></div>
+                        <input type="number" id="x"><input type="number" id="y">
+                        <div class="select" id="colors"></div>
+                        <button id="addpoint">Add</button>
+                    </div>
+                </div>
+            </div>
+            <div id="canvas-container">
+                <div id="fps">10</div>
+            </div>
+        </div>
+        <script src="lib/select.js"></script>
+    </body>
+</html>

@@ -1,0 +1,150 @@
+body {
+    margin: 0;
+    background: white;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+#main-wrapper {
+    width: 100%;
+    height: 100%;
+    transition: filter .6s linear;
+}
+
+.loading #main-wrapper {
+    filter: blur(4px);
+}
+
+#loader {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    transition: background .4s linear;
+}
+
+.loading #loader {
+    background: rgba(0, 0, 0, 0.75);
+}
+
+#leftpanel {
+    width: 30%;
+    height: 100%;
+    box-sizing: border-box;
+    border-right: 1px solid #a2a2a2;
+    float: left;
+}
+
+#points-panel {
+    width: 100%;
+    height: calc(100% - 50px);
+}
+
+#point-list {
+    width: 100%;
+    height: calc(100% - 50px);
+}
+
+.sbtn button {
+    margin: 8px 0;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #323232;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    background: linear-gradient(180deg, white, #f0f0f0);
+    min-width: 16%;
+    border-left: none;
+    user-select: none;
+    outline-color: rgb(235, 114, 34);
+}
+
+.sbtn button:active {
+    background: linear-gradient(0deg, white, #f0f0f0);
+}
+
+.sbtn button:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    margin-left: 8px;
+    border-left: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.sbtn button:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    margin-right: 8px;
+}
+
+#fps {
+    position: absolute;
+}
+
+#canvas-container {
+    width: 70%;
+    height: 100%;
+    background: #fafafa;
+    overflow: scroll;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+#point-add > * {
+    vertical-align: middle;
+}
+
+#point-add input {
+    width: 48px;
+}
+
+.select-list > div,
+.select-sel > div {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.04);
+    line-height: 24px;
+    text-align: center;
+    font-weight: 600;
+    color: #323232;
+    user-select: none;
+}
+
+.select-list > div:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+#colors .select-list {
+    padding: 0 4px 0 4px;
+}
+
+button {
+    margin: 8px 0;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #323232;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    background: linear-gradient(180deg, white, #f0f0f0);
+    min-width: 16%;
+    user-select: none;
+    outline-color: rgb(235, 114, 34);
+    border-radius: 4px;
+}
+
+#point-add > div.select > .select-sel {
+    margin-left: 8px;
+    margin-right: 4px;
+}
+
+#point-add > div.select:not(:first-child) > .select-sel {
+    /* I'm too lazy so just change margin with not() selector */
+    margin-left: 4px;
+}
