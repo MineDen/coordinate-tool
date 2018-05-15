@@ -50,6 +50,20 @@ body {
     height: calc(100% - 50px);
 }
 
+#points-panel button {
+    margin: 8px 0;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #323232;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    background: linear-gradient(180deg, white, #f0f0f0);
+    min-width: 16%;
+    user-select: none;
+    outline-color: rgb(235, 114, 34);
+    border-radius: 4px;
+}
+
 .sbtn button {
     margin: 8px 0;
     padding: 8px 12px;
@@ -122,29 +136,15 @@ body {
 }
 
 #colors .select-list {
-    padding: 0 4px 0 4px;
+    padding: 0 4px 1px 4px;
 }
 
-button {
-    margin: 8px 0;
-    padding: 8px 12px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #323232;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    background: linear-gradient(180deg, white, #f0f0f0);
-    min-width: 16%;
-    user-select: none;
-    outline-color: rgb(235, 114, 34);
-    border-radius: 4px;
-}
-
-#point-add > div.select > .select-sel {
+#point-add > div.select {
     margin-left: 8px;
     margin-right: 4px;
 }
 
-#point-add > div.select:not(:first-child) > .select-sel {
+#point-add > div.select:not(:first-child) {
     /* I'm too lazy so just change margin with not() selector */
     margin-left: 4px;
 }
