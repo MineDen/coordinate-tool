@@ -50,7 +50,12 @@ body {
     height: calc(100% - 50px);
 }
 
-#points-panel button {
+#tabs {
+    display: inline-block;
+}
+
+#points-panel button,
+#json button {
     margin: 8px 0;
     padding: 8px 12px;
     font-size: 14px;
@@ -62,6 +67,25 @@ body {
     user-select: none;
     outline-color: rgb(235, 114, 34);
     border-radius: 4px;
+}
+
+#json button {
+    outline: none;
+    width: 34px;
+    min-width: unset;
+    height: 34px;
+}
+
+#json button:not(:first-child) {
+    margin-left: 8px;
+}
+
+#json button:last-child {
+    margin-right: 8px;
+}
+
+#json {
+    float: right;
 }
 
 .sbtn button {
@@ -106,6 +130,10 @@ body {
     overflow: scroll;
     display: inline-block;
     box-sizing: border-box;
+}
+
+canvas {
+    cursor: none;
 }
 
 #point-add > * {

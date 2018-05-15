@@ -5,9 +5,9 @@ var CoordinatePlaneRenderer = function (ctx) {
      * @type {CanvasRenderingContext2D}
      */
     this.ctx = ctx;
-    this.xres = 10;
-    this.yres = 8;
-    this.size = 26;
+    this.xres = 15;
+    this.yres = 12;
+    this.size = 24;
 }
 
 CoordinatePlaneRenderer.prototype.redrawPlane = function () {
@@ -76,7 +76,7 @@ CoordinatePlaneRenderer.prototype.renderMarks = function () {
     this.ctx.textAlign = "center";
     this.ctx.textBaseline = "middle";
     this.ctx.strokeStyle = "#323232";
-    this.ctx.font = "700 12px sans-serif";
+    this.ctx.font = "700 " + this.size / 2 + "px sans-serif";
     for (var x = 1; x <= this.xres; x++) {
         this.ctx.fillText(-x, 512 - x * this.size, 512 + this.size, this.size);
         this.ctx.fillText(x, 512 + x * this.size, 512 - this.size, this.size);
@@ -90,21 +90,83 @@ CoordinatePlaneRenderer.prototype.renderMarks = function () {
     this.ctx.fillText("y", 512, 512 - (this.yres + 0.75) * this.size);
 }
 
+CoordinatePlaneRenderer.prototype.drawTooltip = function (text, point) {
+    var text = this.ctx.measureText(text);
+    this.ctx.fillRect();
+}
+
 /**
  * 
  * @param {Point} point 
  */
-CoordinatePlaneRenderer.prototype.drawPoint = function (point) {
+CoordinatePlaneRenderer.prototype.drawPoint = function (point, interpolate = true) {
+    if (interpolate) {
+        point.interpolateX();
+        point.interpolateY();
+    }
     this.ctx.save();
     this.ctx.fillStyle = "rgb(" + point.color.r + ", " + point.color.g + ", " + point.color.b + ")";
     this.ctx.beginPath();
-    this.ctx.arc(512 + point.x * this.size, 512 - point.y * this.size, 3, 0, Math.PI * 2);
+    this.ctx.arc(512 + point.x * this.size, 512 - point.y * this.size, 4, 0, Math.PI * 2);
     this.ctx.fill();
     this.ctx.restore();
 }
 
-var LinesRenderer = function () {
-
+var LinesRenderer = function (cplane) {
+    this.cplane = cplane;
+    /**
+     * @type {CanvasRenderingContext2D}
+     */
+    this.ctx = cplane.ctx;
 }
 
-export { CoordinatePlaneRenderer as CoordinatePlane, LinesRenderer as Lines };
+/**
+ * 
+ * @param {Point[]} pointArr 
+ */
+LinesRenderer.prototype.renderLines = function (pointArr) {
+    this.ctx.save();
+    for (var i = 0; i < pointArr.length; i++) {
+        var il = pointArr[i + 1] ? il = i + 1 : il = 0;
+        var r = Math.round((pointArr[i].color.r + pointArr[il].color.r) / 2);
+        var g = Math.round((pointArr[i].color.g + pointArr[il].color.g) / 2);
+        var b = Math.round((pointArr[i].color.b + pointArr[il].color.b) / 2);
+        this.ctx.strokeStyle = "rgb(" + r + ", " + g + ", " + b + ")";
+        this.ctx.beginPath();
+        this.ctx.moveTo(512 + pointArr[i].x * this.cplane.size,
+            512 - pointArr[i].y * this.cplane.size);
+        this.ctx.lineTo(512 + pointArr[il].x * this.cplane.size,
+            512 - pointArr[il].y * this.cplane.size);
+        this.ctx.stroke();
+    }
+    this.ctx.restore();
+}
+
+var CursorPointRenderer = function (cplane) {
+    this.cplane = cplane;
+    /**
+     * @type {CanvasRenderingContext2D}
+     */
+    this.ctx = cplane.ctx;
+    this.mx = this.my = undefined;
+};
+
+CursorPointRenderer.prototype.drawNearPoint = function () {
+    this.ctx.save();
+    if ((this.mx && this.my) != undefined) {
+        this.ctx.strokeStyle = "rgba(35, 35, 35, 0.6)";
+        this.ctx.beginPath();
+        this.ctx.arc(this.mx, this.my, 6, 0, Math.PI * 2);
+        this.ctx.moveTo(this.mx, this.my);
+        this.ctx.lineTo(this.x * this.cplane.size + 512, 512 - this.y * this.cplane.size);
+        this.ctx.stroke();
+        this.ctx.fillStyle = "rgba(25, 25, 25, 0.5)";
+        this.ctx.beginPath();
+        this.ctx.arc(512 + this.x * this.cplane.size,
+            512 - this.y * this.cplane.size, 5, 0, Math.PI * 2);
+        this.ctx.fill();
+    }
+    this.ctx.restore();
+}
+
+export { CoordinatePlaneRenderer as CoordinatePlane, LinesRenderer as Lines, CursorPointRenderer as CursorPoint };
