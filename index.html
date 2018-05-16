@@ -6,6 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Coordinate Tool</title>
         <script type="module" src="main.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="main.css">
         <link rel="stylesheet" href="lib/select.css">
     </head>
@@ -20,14 +21,17 @@
                         <button id="points">Points</button><button id="appearance">Appearance</button>
                     </div>
                     <div id="json">
-                        <button id="import">I</button><button id="export">E</button>
+                        <input type="file" accept="application/json" id="importfile">
+                        <button id="import" class="material-icons">folder_open</button>
+                        <button id="export" class="material-icons">save_alt</button>
                     </div>
                 </div>
                 <div id="points-panel">
                     <div id="point-list"></div>
                     <div id="point-add">
                         <div class="select" id="letters"></div>
-                        <input type="number" id="x"><input type="number" id="y">
+                        <input type="number" placeholder="X" step="0.25" id="x">
+                        <input type="number" placeholder="Y" step="0.25" id="y">
                         <div class="select" id="colors"></div>
                         <button id="addpoint">Add</button>
                     </div>
@@ -35,6 +39,10 @@
             </div>
             <div id="canvas-container">
                 <div id="fps">10</div>
+                <div id="info-box">
+                    <div id="info-text"></div>
+                    <div id="close-info" class="material-icons">close</div>
+                </div>
             </div>
         </div>
         <script src="lib/select.js"></script>

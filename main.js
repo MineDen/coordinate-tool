@@ -1,8 +1,15 @@
 import * as renderers from "./renderers.js";
 import { Point } from "./point.js";
+
+const jsonversion = 2;
+
 var canvas = document.createElement("canvas");
 canvas.width = canvas.height = 1024;
 var ctx = canvas.getContext("2d");
+/**
+ * @type {HTMLDivElement}
+ */
+var infobox;
 var cplane = new renderers.CoordinatePlane(ctx);
 var lines = new renderers.Lines(cplane);
 var cursor = new renderers.CursorPoint(cplane);
@@ -26,7 +33,7 @@ var colors = [
 
 /**
  * List of points (array)
- * @type {points[]}
+ * @type {Point[]}
  */
 var points = [];
 
@@ -40,6 +47,26 @@ window.onload = function () {
     var yElement = document.getElementById("y");
     var color = document.getElementById("colors");
 
+    infobox = document.getElementById("info-box");
+    infobox.children[1].onclick = function () {
+        this.parentElement.classList.remove("shown");
+    }
+
+    var importbtn = document.getElementById("import");
+    importbtn.onclick = importFromFile;
+    var ifile = document.getElementById("importfile");
+    ifile.oninput = function () {
+        if (this.files[0]) {
+            if ((this.of && this.files[0] != this.of) || !this.of) {
+                var reader = new FileReader();
+                reader.onloadend = function (ev) {
+                    importJSON(ev.srcElement.result);
+                };
+                reader.readAsText(this.files[0]);
+            }
+        }
+        this.of = this.files[0];
+    }
     document.getElementById("export").onclick = exportJSON;
 
     canvas.onmousemove = function (ev) {
@@ -48,6 +75,11 @@ window.onload = function () {
         cursor.my = ev.y - rect.top;
         cursor.x = Math.round((ev.x - 512 - rect.left) / cplane.size);
         cursor.y = Math.round(-((ev.y - 512 - rect.top) / cplane.size));
+    }
+
+    canvas.onclick = function () {
+        createPoint(cursor.x, cursor.y, color.getAttribute("data-value"),
+            letter.getAttribute("data-value"));
     }
 
     container.onmouseleave = function () {
@@ -132,18 +164,105 @@ function exportJSON() {
             yres: cplane.yres,
             size: cplane.size
         },
-        version: 1
+        version: jsonversion
     };
     for (var i = 0; i < points.length; i++)
         json.points.push({
             x: points[i].rx,
             y: points[i].ry,
-            color: points[i].color,
-            letterID: points[i].letterID
+            color: colors.indexOf(points[i].color),
+            letterID: points[i].letter
         });
     var a = document.createElement("a");
     var blob = new Blob([JSON.stringify(json)], { type: "application/json" });
     a.href = URL.createObjectURL(blob);
     a.download = "coordinateplane.json";
     a.click();
+}
+
+function importFromFile() {
+    /**
+     * @type {HTMLInputElement}
+     */
+    var ifile = document.getElementById("importfile");
+    ifile.click();
+    if (ifile.files[0]) {
+        var reader = new FileReader();
+        reader.onloadend = function (ev) {
+            importJSON(ev.srcElement.result);
+        };
+        reader.readAsText(ifile.files[0]);
+    }
+}
+
+function importJSON(str) {
+    console.log(str);
+    try {
+        var obj = JSON.parse(str);
+    } catch (e) {
+        infobox.children[0].innerHTML = "Error: " + e.message;
+        infobox.classList.add("shown");
+        return;
+    }
+
+    if (obj.version) {
+        if (obj.version <= jsonversion) {
+            try {
+                switch (obj.version) {
+                    case 2:
+                        if (!obj.points || !obj.planeSettings) {
+                            infobox.children[0].innerHTML = "Error: File corrupted";
+                            infobox.classList.add("shown");
+                            return;
+                        }
+                        points = [];
+                        cplane.xres = obj.planeSettings.xres;
+                        cplane.yres = obj.planeSettings.yres;
+                        cplane.size = obj.planeSettings.size;
+                        for (var i = 0; i < obj.points.length; i++) {
+                            if (obj.points[i].color == undefined || obj.points[i].letterID == undefined) {
+                                infobox.children[0].innerHTML = "Error: File corrupted";
+                                infobox.classList.add("shown");
+                                return;
+                            }
+                            createPoint(obj.points[i].x, obj.points[i].y,
+                                obj.points[i].color, obj.points[i].letterID);
+                        }
+                        break;
+                    case 1:
+                        infobox.children[0].innerHTML = "Warning: Colors will not be preserved";
+                        infobox.classList.add("shown");
+                        if (!obj.points || !obj.planeSettings) {
+                            infobox.children[0].innerHTML = "Error: File corrupted";
+                            infobox.classList.add("shown");
+                            return;
+                        }
+                        points = [];
+                        cplane.xres = obj.planeSettings.xres;
+                        cplane.yres = obj.planeSettings.yres;
+                        cplane.size = obj.planeSettings.size;
+                        for (var i = 0; i < obj.points.length; i++) {
+                            if (!obj.points[i].color || obj.points[i].letterID == undefined) {
+                                infobox.children[0].innerHTML = "Error: File corrupted";
+                                infobox.classList.add("shown");
+                                return;
+                            }
+                            createPoint(obj.points[i].x, obj.points[i].y,
+                                5, obj.points[i].letterID);
+                        }
+                        break;
+                    default:
+                        infobox.children[0].innerHTML = "Error: Unknown version";
+                        infobox.classList.add("shown");
+                        break;
+                }
+            } catch (e) {
+                infobox.children[0].innerHTML = "Unknown error (is file corrupted?)";
+                infobox.classList.add("shown");
+            }
+        }
+    } else {
+        infobox.children[0].innerHTML = "Error: Version not specified";
+        infobox.classList.add("shown");
+    }
 }
