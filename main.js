@@ -52,10 +52,8 @@ window.onload = function () {
         this.parentElement.classList.remove("shown");
     }
 
-    var importbtn = document.getElementById("import");
-    importbtn.onclick = importFromFile;
     var ifile = document.getElementById("importfile");
-    ifile.oninput = function () {
+    ifile.onchange = function () {
         if (this.files[0]) {
             if ((this.of && this.files[0] != this.of) || !this.of) {
                 var reader = new FileReader();
@@ -66,6 +64,9 @@ window.onload = function () {
             }
         }
         this.of = this.files[0];
+    }
+    document.getElementById("import").onclick = function () {
+        ifile.click();
     }
     document.getElementById("export").onclick = exportJSON;
 
@@ -178,21 +179,6 @@ function exportJSON() {
     a.href = URL.createObjectURL(blob);
     a.download = "coordinateplane.json";
     a.click();
-}
-
-function importFromFile() {
-    /**
-     * @type {HTMLInputElement}
-     */
-    var ifile = document.getElementById("importfile");
-    ifile.click();
-    if (ifile.files[0]) {
-        var reader = new FileReader();
-        reader.onloadend = function (ev) {
-            importJSON(ev.srcElement.result);
-        };
-        reader.readAsText(ifile.files[0]);
-    }
 }
 
 function importJSON(str) {
