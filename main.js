@@ -146,7 +146,7 @@ function draw() {
     cplane.renderCells();
     cplane.redrawPlane();
     cplane.renderMarks();
-    lines.renderLines(points);
+    //lines.renderLines(points);
     for (var i = 0; i < points.length; i++)
         cplane.drawPoint(points[i]);
     cursor.drawNearPoint();
