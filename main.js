@@ -30,6 +30,7 @@ var colors = [
     { r: 110, g: 48, b: 192 },
     { r: 25, g: 25, b: 25 }
 ];
+var modes = ["Default", "Drawing"]
 
 /**
  * List of points (array)
@@ -46,6 +47,7 @@ window.onload = function () {
     var xElement = document.getElementById("x");
     var yElement = document.getElementById("y");
     var color = document.getElementById("colors");
+    var mode = document.getElementById("mode");
 
     infobox = document.getElementById("info-box");
     infobox.children[1].onclick = function () {
@@ -110,6 +112,10 @@ window.onload = function () {
         colorsel.add(col);
     }
     colorsel.select(5);
+	
+	for (var m = 0; m < modes.length; m++) {
+		var
+	}
 
     container.scrollLeft = Math.round((container.scrollWidth - container.clientWidth) / 2);
     container.scrollTop = Math.round((container.scrollHeight - container.clientHeight) / 2);
